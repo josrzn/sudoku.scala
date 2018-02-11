@@ -1,0 +1,5 @@
+project/target
+target/
+*.class
+*.ttl
+.idea/

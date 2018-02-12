@@ -17,4 +17,23 @@ object Solver {
     for (r <- l) yield (full diff r.map(g(_)))
   }
 
+  def possibles(gr: List[Int],
+    ros: List[List[Int]], cos: List[List[Int]], sqs: List[List[Int]]) = {
+    def index(lls: List[List[Int]]): Map[Int, Int] =
+      lls.zipWithIndex.map{
+        t: Tuple2[List[Int], Int] => t._1.map((_, t._2))
+      }.flatten.toMap
+    val ro = index(ros)
+    val co = index(cos)
+    val sq = index(sqs)
+
+    for (i <- 0 to 80) yield {
+      if (0 == gr(i)) {
+        missings(gr, ros)(ro(i)) intersect
+        missings(gr, cos)(co(i)) intersect
+        missings(gr, sqs)(sq(i))
+      } else List()
+    }
+  }
+
 }

@@ -40,4 +40,8 @@ object Main extends App {
     mkString("\n")
   )
 
+  println("index:")
+  for ((ns, i) <- possibles(grid, rows, cols, squares).zipWithIndex)
+    println(i + ": " + ns.mkString(", "))
+
 }

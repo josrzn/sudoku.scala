@@ -2,19 +2,32 @@ import org.scalatest._
 import Solver._
 
 class SolverSpec extends FlatSpec with Matchers {
+
+  val ros = (for (i <- 0 to 8) yield {
+    (9 * i to 9 * i + 8).toList
+  }).toList
+  val cos = (for (i <- 0 to 8) yield {
+    (i to (9 * 8 + i) by 9).toList
+  }).toList
+  val sqs = (for (i <- 0 to 2; j <- 0 to 2) yield {
+    (for (k <- 0 to 2; l <- 0 to 2) yield {
+      i * 27 + j * 3 + k * 9 + l
+    }).toList
+  }).toList
+
   "missings" should "lists all numbers when given an empty grid" in {
     (0 to 8).foreach(
-      missings(List.fill(81)(0), rows)(_) should contain allOf (1, 2, 3, 4, 5, 6, 7, 8, 9)
+      missings(List.fill(81)(0), ros)(_) should contain allOf (1, 2, 3, 4, 5, 6, 7, 8, 9)
     )
     (0 to 8).foreach(
-      missings(List.fill(81)(0), cols)(_) should contain allOf (1, 2, 3, 4, 5, 6, 7, 8, 9)
+      missings(List.fill(81)(0), cos)(_) should contain allOf (1, 2, 3, 4, 5, 6, 7, 8, 9)
     )
     (0 to 8).foreach(
-      missings(List.fill(81)(0), squares)(_) should contain allOf (1, 2, 3, 4, 5, 6, 7, 8, 9)
+      missings(List.fill(81)(0), sqs)(_) should contain allOf (1, 2, 3, 4, 5, 6, 7, 8, 9)
     )
   }
 
-  "missings" should "lists no number when given a solved grid" in {
+  "missings" should "lists no number for rows, cols or squares when given a solved grid" in {
     val grid = Util.init(
       "435269781" +
       "682571493" +
@@ -28,13 +41,13 @@ class SolverSpec extends FlatSpec with Matchers {
     )
 
     (0 to 8).foreach(
-      missings(grid, rows)(_) shouldBe empty
+      missings(grid, ros)(_) shouldBe empty
     )
     (0 to 8).foreach(
-      missings(grid, cols)(_) shouldBe empty
+      missings(grid, cos)(_) shouldBe empty
     )
     (0 to 8).foreach(
-      missings(grid, squares)(_) shouldBe empty
+      missings(grid, sqs)(_) shouldBe empty
     )
   }
 
@@ -51,17 +64,17 @@ class SolverSpec extends FlatSpec with Matchers {
       "  37246  "
     )
 
-    missings(grid, rows)(0) should contain only (1, 2, 3, 5)
-    missings(grid, rows)(1) should contain only (1, 3, 4, 5, 7, 9)
-    missings(grid, rows)(2) should contain only (1, 2, 3, 6, 7, 8, 9)
+    missings(grid, ros)(0) should contain only (1, 2, 3, 5)
+    missings(grid, ros)(1) should contain only (1, 3, 4, 5, 7, 9)
+    missings(grid, ros)(2) should contain only (1, 2, 3, 6, 7, 8, 9)
 
-    missings(grid, cols)(0) should contain only (3, 4, 5, 6, 7, 8)
-    missings(grid, cols)(1) should contain only (1, 3, 5, 7, 9)
-    missings(grid, cols)(2) should contain only (2, 5, 7, 8, 9)
+    missings(grid, cos)(0) should contain only (3, 4, 5, 6, 7, 8)
+    missings(grid, cos)(1) should contain only (1, 3, 5, 7, 9)
+    missings(grid, cos)(2) should contain only (2, 5, 7, 8, 9)
 
-    missings(grid, squares)(0) should contain only (1, 3, 5, 7, 8, 9)
-    missings(grid, squares)(1) should contain only (1, 2, 3, 4)
-    missings(grid, squares)(2) should contain only (1, 2, 3, 5, 6, 7, 9)
+    missings(grid, sqs)(0) should contain only (1, 3, 5, 7, 8, 9)
+    missings(grid, sqs)(1) should contain only (1, 2, 3, 4)
+    missings(grid, sqs)(2) should contain only (1, 2, 3, 5, 6, 7, 9)
 
   }
 
@@ -78,11 +91,11 @@ class SolverSpec extends FlatSpec with Matchers {
       "  37246  "
     )
 
-    possibles(grid, rows, cols, squares)(0) should contain only (3, 5)
-    possibles(grid, rows, cols, squares)(1) should contain only (1, 3, 5)
-    possibles(grid, rows, cols, squares)(52) shouldBe empty
-    possibles(grid, rows, cols, squares)(69) should contain only (2, 3, 7, 9)
-    possibles(grid, rows, cols, squares)(80) should contain only (1, 9)
+    possibles(grid)(0) should contain only (3, 5)
+    possibles(grid)(1) should contain only (1, 3, 5)
+    possibles(grid)(52) shouldBe empty
+    possibles(grid)(69) should contain only (2, 3, 7, 9)
+    possibles(grid)(80) should contain only (1, 9)
   }
 
 }

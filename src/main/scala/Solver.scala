@@ -36,7 +36,7 @@ object Solver {
 
   def reveal(grid: List[Int]): List[Int] = {
     val poss = possibles(grid)
-    if (0 < poss.filter(1 == _.size).size)
+    if (poss.exists(1 == _.size))
       reveal(grid.zip(poss).map{
         t: Tuple2[Int, List[Int]] =>
         t match {

@@ -78,6 +78,60 @@ class SolverSpec extends FlatSpec with Matchers {
 
   }
 
+  "noduplicates" should "be fine with a valid grid" in {
+    val grid = Util.init(
+      "  46798  " +
+      "26   8   " +
+      "    5 4  " +
+      "92   5184" +
+      " 4 2 1 9 " +
+      "1869   25" +
+      "  1 9    " +
+      "   5   48" +
+      "  37246  "
+    )
+
+    noduplicates(grid) shouldBe true
+  }
+
+  "noduplicates" should "not like a grid with duplicates" in {
+    for (g <- List(
+      Util.init(
+        "  46798  " +
+        "261  8   " +
+        "    5 4  " +
+        "92   5184" +
+        " 4 2 1 9 " +
+        "1869   25" +
+        "  1 9    " +
+        "   5   48" +
+        "  37246  "
+      ),
+      Util.init(
+        "  46798  " +
+        "26   8   " +
+        "    5 4  " +
+        "92   5184" +
+        " 4 2 1 9 " +
+        "1869   25" +
+        "  1 9    " +
+        "4  5   48" +
+        "  37246  "
+      ),
+      Util.init(
+        "  46798  " +
+        "26   8   " +
+        "    5 4  " +
+        "92   5184" +
+        " 4 2 1 9 " +
+        "1869   25" +
+        "  1 9    " +
+        "   5 9 48" +
+        "  37246  "
+      )
+    )) noduplicates(g) shouldBe false
+  }
+
   "possibles" should "lists possible numbers when given a typical grid" in {
     val grid = Util.init(
       "  46798  " +

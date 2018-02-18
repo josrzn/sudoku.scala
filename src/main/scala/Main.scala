@@ -45,8 +45,9 @@ object Main extends App {
   )
 
   show(grid)
-  for (g <- solve(grid).distinct if g.forall(0 != _)){
-    println("\n\n")    
-    show(g)
+  val solutions = for (g <- solve(grid).distinct if g.forall(0 != _)) yield g
+  for (g <- solutions.zipWithIndex){
+    println(s"\n\n\nsolution #${g._2}:\n\n")
+    show(g._1)
   }
 }
